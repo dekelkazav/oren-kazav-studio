@@ -15,8 +15,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Bellefair&family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Heebo:wght@300;400;500&family=Josefin+Sans:wght@200;300;400&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="images/works/siddur-box-sm.webp">
   <link rel="stylesheet" href="styles.css">
+  <script src="a11y.js"></script>
 </head>
 <body class="is-loading">
+  <a class="skip-link" href="#main">דילוג לתוכן הראשי</a>
 
   <!-- SVG sprite: the OK monogram, traced from the logo -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -48,7 +50,7 @@
   <header class="header" id="header">
     <a href="#top" class="brand" aria-label="אורן קצב – לראש העמוד">
       <svg class="brand-mark"><use href="#mark"/></svg>
-      <span class="brand-name">OREN KAZAV</span>
+      <span class="brand-name" lang="en">OREN KAZAV</span>
     </a>
     <nav class="nav" id="nav" aria-label="ניווט ראשי">
       <span class="nav-indicator" aria-hidden="true"></span>
@@ -85,7 +87,7 @@
     </div>
   </div>
 
-  <main id="top">
+  <main id="main">
     <!-- ===== Hero ===== -->
     <section class="hero">
       <div class="hero-copy">
@@ -232,7 +234,7 @@
         <h2 class="title" data-reveal>היי, אני אורן</h2>
         <p data-reveal>אני מעצבת ומייסדת הסטודיו. אני מאמינה שמתנה טובה היא כזו שרואים בה מחשבה – ולכן כל מארז שיוצא מהסטודיו מעוצב במיוחד בשביל מי שיקבל אותו.</p>
         <p data-reveal>אני משלבת עיצוב גרפי, חריטה, הדפסת UV והטבעה כדי ליצור פריטים אישיים, עמידים ויפים – לגננות ולמורות, לכלות ולבנות מצווה, לחגים, לצוותים ולחברות.</p>
-        <p class="signature" data-reveal>Oren Kazav</p>
+        <p class="signature" data-reveal lang="en">Oren Kazav</p>
       </div>
     </section>
 
@@ -282,6 +284,11 @@
     <div class="footer-word" aria-hidden="true">OREN KAZAV</div>
     <div class="footer-row">
       <span>© <span id="year"></span> אורן קצב · סטודיו לעיצוב ומיתוג</span>
+      <nav class="footer-links" aria-label="מידע משפטי">
+        <a href="accessibility.html">הצהרת נגישות</a>
+        <a href="privacy.html">מדיניות פרטיות</a>
+        <a href="terms.html">תנאי הזמנה</a>
+      </nav>
       <a href="#top" class="to-top">חזרה למעלה ↑</a>
     </div>
   </footer>

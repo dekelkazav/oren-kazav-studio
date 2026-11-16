@@ -7,7 +7,9 @@
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
   const lerp = (a, b, t) => a + (b - a) * t;
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduceOS = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const a11y = (k) => document.documentElement.classList.contains("a11y-" + k);
+  let reduce = reduceOS || a11y("still");
   const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
   const isDesktop = () => innerWidth > 980;
   const catName = (id) => (CATEGORIES.find((c) => c.id === id) || {}).name || "";
@@ -45,6 +47,11 @@
     if (lenis) lenis.scrollTo(el, { offset: el === 0 ? 0 : -10, duration: 1.6 });
     else if (el === 0) scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
     else el.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+    // move keyboard focus to the target so screen readers / Tab continue from there
+    if (el !== 0) {
+      if (!el.matches("a, button, input, select, textarea, [tabindex]")) el.setAttribute("tabindex", "-1");
+      el.focus({ preventScroll: true });
+    }
   }
   document.addEventListener("click", (e) => {
     const a = e.target.closest('a[href^="#"]');
@@ -140,7 +147,7 @@
         <button class="add${on ? " added" : ""}" data-add="${p.id}" aria-pressed="${on}" aria-label="${on ? "הסרה מהרשימה" : "הוספה לרשימה"}: ${esc(p.name)}"><i></i><span>${on ? "נבחר" : "הוספה"}</span></button>
       </div>
       <div class="card-info">
-        <h3 data-open="${p.id}">${esc(p.name)}</h3>
+        <h3><button type="button" class="card-title" data-open="${p.id}">${esc(p.name)}</button></h3>
         <p>${p.techniques.map((t) => esc(TECHNIQUES[t])).join(" · ")}</p>
       </div>
     </article>`;
@@ -186,8 +193,31 @@
 
   /* ===== drawer (selection list) ===== */
   const drawer = $("#drawer");
-  function openDrawer() { drawer.classList.add("open"); drawer.setAttribute("aria-hidden", "false"); lockScroll(true); }
-  function closeDrawer() { drawer.classList.remove("open"); drawer.setAttribute("aria-hidden", "true"); if (!modal.classList.contains("open")) lockScroll(false); }
+  /* focus management for dialogs: remember who opened it, keep Tab inside, restore on close */
+  let lastFocus = null;
+  const focusables = (root) => $$('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])', root).filter((el) => el.offsetParent !== null);
+  function openDialog(root) { lastFocus = document.activeElement; setTimeout(() => { const f = focusables(root)[0]; if (f) f.focus({ preventScroll: true }); }, 60); }
+  function restoreFocus() { if (lastFocus && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true }); lastFocus = null; }
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Tab") return;
+    const root = modal.classList.contains("open") ? $(".modal-dialog", modal)
+      : drawer.classList.contains("open") ? $(".drawer-panel", drawer)
+      : document.body.classList.contains("menu-open") ? null : undefined;
+    if (root === undefined) return;
+    const list = root ? focusables(root) : [burger, ...focusables($("#menu"))];
+    if (!list.length) return;
+    const first = list[0], last = list[list.length - 1];
+    if (!list.includes(document.activeElement)) { e.preventDefault(); first.focus(); }
+    else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  function openDrawer() { drawer.classList.add("open"); drawer.setAttribute("aria-hidden", "false"); lockScroll(true); openDialog($(".drawer-panel", drawer)); }
+  function closeDrawer() {
+    if (!drawer.classList.contains("open")) return;
+    drawer.classList.remove("open"); drawer.setAttribute("aria-hidden", "true");
+    if (!modal.classList.contains("open")) { lockScroll(false); restoreFocus(); }
+  }
 
   function renderList() {
     const box = $("#listItems");
@@ -257,13 +287,13 @@
     modal.classList.add("open");
     modal.setAttribute("aria-hidden", "false");
     lockScroll(true);
-    setTimeout(() => $(".x-btn", modal).focus({ preventScroll: true }), 50);
+    openDialog($(".modal-dialog", modal));
   }
   function closeModal() {
     if (!modal.classList.contains("open")) return;
     modal.classList.remove("open");
     modal.setAttribute("aria-hidden", "true");
-    if (!drawer.classList.contains("open")) lockScroll(false);
+    if (!drawer.classList.contains("open")) { lockScroll(false); restoreFocus(); }
   }
   modal.addEventListener("click", (e) => { if (e.target.closest("[data-close]")) closeModal(); });
 
@@ -313,6 +343,7 @@
     burger.setAttribute("aria-expanded", "false");
     $("#menu").setAttribute("aria-hidden", "true");
     lockScroll(false);
+    restoreFocus();
   }
   burger.addEventListener("click", () => {
     const open = !document.body.classList.contains("menu-open");
@@ -321,6 +352,7 @@
     burger.setAttribute("aria-expanded", "true");
     $("#menu").setAttribute("aria-hidden", "false");
     lockScroll(true);
+    openDialog($("#menu"));
   });
 
   /* ===== nav: hover pill + scroll spy ===== */
@@ -348,8 +380,9 @@
   /* ===== custom cursor ===== */
   const cursor = $(".cursor"), ring = $(".cursor-ring"), dot = $(".cursor-dot"), cLabel = $(".cursor-label");
   const mouse = { x: innerWidth / 2, y: innerHeight / 2 }, ringPos = { x: mouse.x, y: mouse.y };
-  if (fine && !reduce) {
-    document.body.classList.add("has-cursor");
+  const updateCursor = () => document.body.classList.toggle("has-cursor", fine && !reduce && !a11y("cursor"));
+  updateCursor();
+  if (fine) {
     addEventListener("pointermove", (e) => { mouse.x = e.clientX; mouse.y = e.clientY; cursor.classList.remove("is-hidden"); }, { passive: true });
     document.addEventListener("pointerleave", () => cursor.classList.add("is-hidden"));
     document.addEventListener("pointerover", (e) => {
@@ -362,10 +395,11 @@
   }
 
   /* ===== magnetic buttons ===== */
-  if (fine && !reduce) {
+  if (fine) {
     $$("[data-magnetic]").forEach((el) => {
       el.style.transition = getComputedStyle(el).transition + ", transform .7s cubic-bezier(.22,1,.36,1)";
       el.addEventListener("pointermove", (e) => {
+        if (reduce) return;
         const r = el.getBoundingClientRect();
         const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
         el.style.transform = `translate(${dx * 0.22}px, ${dy * 0.32}px)`;
@@ -377,7 +411,7 @@
   /* ===== hero parallax ===== */
   const floats = $$(".float");
   const par = { x: 0, y: 0, tx: 0, ty: 0 };
-  if (fine && !reduce) {
+  if (fine) {
     hero.addEventListener("pointermove", (e) => { par.tx = e.clientX / innerWidth - 0.5; par.ty = e.clientY / innerHeight - 0.5; });
     hero.addEventListener("pointerleave", () => { par.tx = 0; par.ty = 0; });
   }
@@ -469,7 +503,7 @@
     }
 
     // cursor
-    if (fine && !reduce) {
+    if (document.body.classList.contains("has-cursor")) {
       ringPos.x = lerp(ringPos.x, mouse.x, 0.18); ringPos.y = lerp(ringPos.y, mouse.y, 0.18);
       dot.style.transform = `translate3d(${mouse.x}px, ${mouse.y}px, 0)`;
       ring.style.transform = `translate3d(${ringPos.x}px, ${ringPos.y}px, 0)`;
@@ -489,6 +523,25 @@
     t.textContent = text; t.classList.add("show");
     clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 1900);
   }
+
+  /* ===== react to the accessibility menu ===== */
+  addEventListener("a11y:change", () => {
+    const was = reduce;
+    reduce = reduceOS || a11y("still");
+    updateCursor();
+    if (reduce && !was) {
+      if (lenis) { lenis.destroy(); lenis = null; }
+      marquee.style.transform = "";
+      floats.forEach((f) => (f.style.translate = ""));
+      preview.classList.remove("show");
+    } else if (!reduce && was && window.Lenis && !reduceOS) {
+      lenis = new window.Lenis({ lerp: 0.09, smoothWheel: true });
+    }
+    sizeWorks();
+    setupMarquee();
+    moveFilterIndicator();
+    placeNavInd(activeLink);
+  });
 
   /* ===== init ===== */
   renderFilters();
