@@ -1,0 +1,12 @@
+{
+  "name": "oren-kazav-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "אתר תדמית וקטלוג – סטודיו אורן כזב לעיצוב ומיתוג מארזים",
+  "scripts": {
+    "start": "serve . -l 8080 --no-clipboard"
+  },
+  "devDependencies": {
+    "serve": "^14.2.8"
+  }
+}
