@@ -3,243 +3,321 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>אורן כזב | סטודיו לעיצוב ומיתוג מארזים</title>
-  <meta name="description" content="סטודיו לעיצוב ומיתוג מארזים לחגים, אירועים, מוסדות ולקוחות פרטיים. הדפסות UV, חריטות בעיצוב אישי והדפסות.">
+  <title>אורן קצב | סטודיו לעיצוב ומיתוג מארזים ומתנות</title>
+  <meta name="description" content="אורן קצב – סטודיו לעיצוב ומיתוג מארזים ומתנות אישיות לחגים, לאירועים, לצוותים ולכל מי שרוצים לפנק. חריטה, הדפסת UV, הטבעת זהב ועיצוב אישי. איסוף מקריית אתא ומשלוחים לכל הארץ.">
+  <meta name="theme-color" content="#171513">
+  <meta property="og:title" content="אורן קצב | סטודיו לעיצוב ומיתוג">
+  <meta property="og:description" content="מארזים ומתנות בעיצוב אישי – חריטה, הדפסת UV ועיצוב לכל אירוע.">
+  <meta property="og:image" content="images/works/siddur-box.webp">
+  <link rel="icon" type="image/png" href="images/brand/mark-dark.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&family=Frank+Ruhl+Libre:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bellefair&family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Heebo:wght@300;400;500&family=Josefin+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="images/works/siddur-box-sm.webp">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="is-loading">
+
+  <!-- SVG sprite: the OK monogram, traced from the logo -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="mark" viewBox="-6 -6 305 300">
+      <circle cx="142" cy="146" r="134" fill="none" stroke="currentColor" stroke-width="10"/>
+      <path d="M150 12V280M257 4L150 152M176 116L286 284" fill="none" stroke="currentColor" stroke-width="10"/>
+    </symbol>
+    <symbol id="arrow" viewBox="0 0 24 24"><path d="M19 12H5m6-6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="wa" viewBox="0 0 32 32"><path fill="currentColor" d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3Zm0 23.6a10.6 10.6 0 0 1-5.4-1.5l-.4-.2-3.9 1 1-3.8-.2-.4A10.6 10.6 0 1 1 16 26.6Zm5.8-7.9c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.7 8.7 0 0 1-4.3-3.8c-.3-.6.3-.5 1-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6a1.2 1.2 0 0 0-.9.4 3.7 3.7 0 0 0-1.1 2.7 6.5 6.5 0 0 0 1.3 3.4 14.6 14.6 0 0 0 5.6 5c2.1.9 2.9 1 4 .8a3.4 3.4 0 0 0 2.2-1.6 2.8 2.8 0 0 0 .2-1.6c-.1-.1-.3-.2-.6-.3Z"/></symbol>
+    <symbol id="ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor"/></symbol>
+    <symbol id="bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6L5 8Zm4 0V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+  </svg>
+
+  <!-- ===== Preloader ===== -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader-inner">
+      <svg class="loader-mark" viewBox="-6 -6 305 300">
+        <circle cx="142" cy="146" r="134"/>
+        <path d="M150 12V280"/><path d="M257 4L150 152"/><path d="M176 116L286 284"/>
+      </svg>
+      <div class="loader-word"><span>OREN KAZAV</span></div>
+    </div>
+  </div>
+
+  <!-- ===== Custom cursor (desktop) ===== -->
+  <div class="cursor" aria-hidden="true"><div class="cursor-ring"><span class="cursor-label"></span></div><div class="cursor-dot"></div></div>
 
   <!-- ===== Header ===== -->
-  <header class="site-header" id="top">
-    <div class="container header-inner">
-      <a href="#top" class="logo">
-        <span class="logo-mark" aria-hidden="true">א</span>
-        <span class="logo-text">
-          <strong data-site="name"></strong>
-          <small data-site="tagline"></small>
-        </span>
-      </a>
-      <nav class="main-nav" id="mainNav">
-        <a href="#services">שירותים</a>
-        <a href="#catalog">קטלוג</a>
-        <a href="#gallery">עבודות</a>
-        <a href="#process">איך זה עובד</a>
-        <a href="#about">אודות</a>
-        <a href="#contact">צור קשר</a>
-      </nav>
-      <div class="header-actions">
-        <button class="list-btn" id="openList" aria-label="רשימת הבחירות שלי">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7h-3.2A3 3 0 0 0 12 3.9 3 3 0 0 0 7.2 7H4a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8h1a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1Zm-6-1a1 1 0 1 1 1 1h-2a1 1 0 0 1 1-1Zm-5 0a1 1 0 0 1 1 1H9a1 1 0 0 1 0-1ZM5 9h6v1H5V9Zm2 3h4v7H7v-7Zm10 7h-4v-7h4v7Zm2-9h-6V9h6v1Z"/></svg>
-          <span class="list-label">הבחירות שלי</span>
-          <span class="badge" id="listCount">0</span>
-        </button>
-        <button class="menu-toggle" id="menuToggle" aria-label="תפריט" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
+  <header class="header" id="header">
+    <a href="#top" class="brand" aria-label="אורן קצב – לראש העמוד">
+      <svg class="brand-mark"><use href="#mark"/></svg>
+      <span class="brand-name">OREN KAZAV</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="ניווט ראשי">
+      <span class="nav-indicator" aria-hidden="true"></span>
+      <a href="#studio">הסטודיו</a>
+      <a href="#services">שירותים</a>
+      <a href="#catalog">קטלוג</a>
+      <a href="#works">עבודות</a>
+      <a href="#process">תהליך</a>
+      <a href="#contact">צור קשר</a>
+    </nav>
+    <div class="header-actions">
+      <button class="pill-btn" id="openList" aria-label="רשימת הבחירות שלי" data-cursor="hover">
+        <svg><use href="#bag"/></svg>
+        <span class="pill-label">הבחירות שלי</span>
+        <span class="count" id="listCount">0</span>
+      </button>
+      <button class="burger" id="burger" aria-label="תפריט" aria-expanded="false"><span></span><span></span></button>
     </div>
   </header>
 
-  <main>
+  <!-- Mobile menu -->
+  <div class="menu" id="menu" aria-hidden="true">
+    <nav class="menu-links">
+      <a href="#studio"><small>01</small>הסטודיו</a>
+      <a href="#services"><small>02</small>שירותים</a>
+      <a href="#catalog"><small>03</small>קטלוג</a>
+      <a href="#works"><small>04</small>עבודות</a>
+      <a href="#process"><small>05</small>תהליך</a>
+      <a href="#contact"><small>06</small>צור קשר</a>
+    </nav>
+    <div class="menu-foot">
+      <a data-wa="שלום אורן, הגעתי מהאתר 🙂">וואטסאפ</a>
+      <a data-href="instagram" target="_blank" rel="noopener">אינסטגרם</a>
+    </div>
+  </div>
+
+  <main id="top">
     <!-- ===== Hero ===== -->
     <section class="hero">
-      <div class="container hero-inner">
-        <div class="hero-text">
-          <p class="eyebrow">מארזים · מיתוג · חריטה · הדפסת UV</p>
-          <h1>מארזים שמספרים<br><em>את הסיפור שלכם</em></h1>
-          <p class="lead">עיצוב ומיתוג מארזי מתנה לחגים, לאירועים, למוסדות ולחברות – ולכל מי שרוצה לפנק מישהו אהוב. כל פריט מותאם אישית, מהרעיון ועד האריזה.</p>
-          <div class="hero-cta">
-            <a href="#catalog" class="btn btn-primary">לקטלוג המוצרים</a>
-            <a href="#" class="btn btn-ghost" data-wa="שלום אורן, אשמח לשמוע פרטים על מארזים 🙂">דברו איתי בוואטסאפ</a>
-          </div>
+      <div class="hero-copy">
+        <p class="kicker reveal-up" style="--d:.1s"><span class="kicker-line"></span>סטודיו לעיצוב ומיתוג · קריית אתא</p>
+        <h1 class="hero-title">
+          <span class="line"><span>מעצבים רגעים,</span></span>
+          <span class="line"><span>אורזים <span class="scribble">באהבה<svg viewBox="0 0 300 30" preserveAspectRatio="none" aria-hidden="true"><path d="M4 20C60 8 120 6 180 12s90 10 116 2"/></svg></span>.</span></span>
+        </h1>
+        <p class="hero-lead reveal-up" style="--d:.55s">מארזים ומתנות בעיצוב אישי – לחגים, לאירועים, לצוותים ולכל מי שרוצים לפנק. חריטה, הדפסת UV והטבעת זהב, עם תשומת לב לכל פרט.</p>
+        <div class="hero-cta reveal-up" style="--d:.7s">
+          <a href="#catalog" class="btn btn-ink" data-magnetic><span>לקטלוג המוצרים</span><svg><use href="#arrow"/></svg></a>
+          <a class="btn btn-line" data-wa="שלום אורן, אשמח לשמוע פרטים על מארזים 🙂" data-magnetic><svg><use href="#wa"/></svg><span>דברו איתי</span></a>
         </div>
-        <div class="hero-art" aria-hidden="true">
-          <div class="hero-card c1"></div>
-          <div class="hero-card c2"></div>
-          <div class="hero-card c3"></div>
-        </div>
+      </div>
+
+      <div class="hero-visual" id="heroVisual">
+        <figure class="float f1" data-depth="18"><img src="images/works/siddur-box-sm.webp" alt="מארז כלה עם סידור אישי"></figure>
+        <figure class="float f2" data-depth="34"><img src="images/works/diffuser-names-sm.webp" alt="מפיצי ריח עם שמות"></figure>
+        <figure class="float f3" data-depth="26"><img src="images/works/challah-cards-sm.webp" alt="כרטיסי הפרשת חלה בהטבעת זהב"></figure>
+        <a href="#catalog" class="badge-spin" aria-label="לקטלוג" data-cursor="hover">
+          <svg class="badge-text" viewBox="0 0 200 200" aria-hidden="true">
+            <defs><path id="badgeCircle" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs>
+            <text><textPath href="#badgeCircle" textLength="486" lengthAdjust="spacing">OREN KAZAV · DESIGN STUDIO · GIFT BOXES · </textPath></text>
+          </svg>
+          <svg class="badge-mark"><use href="#mark"/></svg>
+        </a>
+      </div>
+
+      <div class="hero-foot reveal-up" style="--d:.9s">
+        <span>חריטה</span><i></i><span>הדפסת UV</span><i></i><span>הטבעת זהב</span><i></i><span>עיצוב אישי</span>
+        <a href="#studio" class="scroll-cue" aria-label="גללו למטה"><span>גללו</span><b></b></a>
       </div>
     </section>
 
-    <!-- ===== Audiences strip ===== -->
-    <section class="audiences">
-      <div class="container audiences-inner">
-        <div class="aud"><span>🎁</span><div><strong>חגים</strong><small>ראש השנה, פסח, חנוכה ועוד</small></div></div>
-        <div class="aud"><span>💍</span><div><strong>אירועים</strong><small>חתונות, בר/בת מצווה, לידות</small></div></div>
-        <div class="aud"><span>🏢</span><div><strong>מוסדות וחברות</strong><small>מארזי עובדים, כנסים, לקוחות</small></div></div>
-        <div class="aud"><span>💛</span><div><strong>לקוחות פרטיים</strong><small>מתנה אישית לכל רגע</small></div></div>
+    <!-- ===== Marquee ===== -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track" id="marquee">
+        <span>מארזי חג</span><svg><use href="#mark"/></svg>
+        <span>מתנות לצוות</span><svg><use href="#mark"/></svg>
+        <span>בת מצווה</span><svg><use href="#mark"/></svg>
+        <span>הפרשת חלה</span><svg><use href="#mark"/></svg>
+        <span>חריטה אישית</span><svg><use href="#mark"/></svg>
+        <span>הדפסת UV</span><svg><use href="#mark"/></svg>
+        <span>מתנות לגננות</span><svg><use href="#mark"/></svg>
+      </div>
+    </div>
+
+    <!-- ===== Studio / manifesto ===== -->
+    <section class="section studio" id="studio">
+      <div class="label"><span>01</span>הסטודיו</div>
+      <p class="manifesto" id="manifesto">כל מתנה טובה מתחילה בסיפור. אני לוקחת את הסיפור שלכם – שם, תאריך, רגע קטן של תודה – ומעצבת ממנו מארז שנשאר הרבה אחרי שהסרט נפתח.</p>
+      <div class="studio-meta">
+        <div data-reveal><strong>100%</strong><span>עיצוב אישי לכל הזמנה</span></div>
+        <div data-reveal style="--d:.1s"><strong><span dir="ltr">2,700+</span></strong><span>עוקבים באינסטגרם</span></div>
+        <div data-reveal style="--d:.2s"><strong>✦</strong><span>איסוף מקריית אתא ומשלוחים לכל הארץ</span></div>
       </div>
     </section>
 
     <!-- ===== Services ===== -->
-    <section class="section" id="services">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">מה עושים בסטודיו</p>
-          <h2>שירותים</h2>
-        </header>
-        <div class="services-grid">
-          <article class="service">
-            <div class="service-icon"><svg viewBox="0 0 48 48"><rect x="8" y="18" width="32" height="22" rx="2"/><path d="M6 12h36v6H6zM24 12v28M24 12c-3-6-11-6-10 0M24 12c3-6 11-6 10 0"/></svg></div>
-            <h3>עיצוב מארזים</h3>
-            <p>בניית מארז מאפס – בחירת פריטים, קונספט, צבעוניות ואריזה שמתאימה בדיוק לאירוע ולתקציב.</p>
-          </article>
-          <article class="service">
-            <div class="service-icon"><svg viewBox="0 0 48 48"><rect x="6" y="14" width="36" height="20" rx="3"/><path d="M14 14V7h20v7M14 30h20v11H14z"/><circle cx="36" cy="20" r="1.5"/></svg></div>
-            <h3>הדפסת UV</h3>
-            <p>הדפסה צבעונית ועמידה ישירות על עץ, זכוכית, מתכת, אקריליק ופלסטיק – לוגו, איור או תמונה.</p>
-          </article>
-          <article class="service">
-            <div class="service-icon"><svg viewBox="0 0 48 48"><path d="M10 38l4-12 18-18 8 8-18 18z"/><path d="M28 12l8 8M10 38l6-2"/></svg></div>
-            <h3>חריטה בעיצוב אישי</h3>
-            <p>חריטה מדויקת על עץ, עור, מתכת וזכוכית – שמות, הקדשות, ציורי ילדים ולוגואים.</p>
-          </article>
-          <article class="service">
-            <div class="service-icon"><svg viewBox="0 0 48 48"><path d="M8 10h22l10 10v18H8z"/><path d="M30 10v10h10M14 26h20M14 32h14"/></svg></div>
-            <h3>מיתוג והדפסות</h3>
-            <p>כרטיסי ברכה, מדבקות, תוויות, שקיות וקופסאות ממותגות שמשלימות את החוויה.</p>
-          </article>
-        </div>
+    <section class="section services" id="services">
+      <div class="section-head">
+        <div class="label"><span>02</span>מה עושים בסטודיו</div>
+        <h2 class="title" data-reveal>שירותים</h2>
       </div>
+      <ul class="service-list" id="serviceList">
+        <li class="service" data-img="images/works/siddur-box-sm.webp" data-reveal>
+          <span class="service-no">01</span>
+          <h3>עיצוב מארזים</h3>
+          <p>בונים יחד מארז מאפס – קונספט, תכולה, צבעוניות ואריזה שמתאימים בדיוק לאירוע ולתקציב.</p>
+          <svg class="service-arrow"><use href="#arrow"/></svg>
+        </li>
+        <li class="service" data-img="images/works/personal-candle-sm.webp" data-reveal>
+          <span class="service-no">02</span>
+          <h3>חריטה בעיצוב אישי</h3>
+          <p>שמות, הקדשות וברכות חרוטים על במבוק, עץ, זכוכית ועוד – מדויק, עדין ונשאר לתמיד.</p>
+          <svg class="service-arrow"><use href="#arrow"/></svg>
+        </li>
+        <li class="service" data-img="images/works/diffuser-names-sm.webp" data-reveal>
+          <span class="service-no">03</span>
+          <h3>הדפסת UV</h3>
+          <p>הדפסה עמידה ישירות על נרות, מפיצי ריח, כוסות ובקבוקים – שם, לוגו או איור בכל צבע.</p>
+          <svg class="service-arrow"><use href="#arrow"/></svg>
+        </li>
+        <li class="service" data-img="images/works/challah-cards-sm.webp" data-reveal>
+          <span class="service-no">04</span>
+          <h3>הטבעה, הדפסה ומיתוג</h3>
+          <p>כרטיסי ברכה בהטבעת זהב, מדבקות, תגיות ומיתוג מלא לאירוע – כדי שכל פרט ירגיש חלק מהסיפור.</p>
+          <svg class="service-arrow"><use href="#arrow"/></svg>
+        </li>
+      </ul>
+      <div class="service-preview" id="servicePreview" aria-hidden="true"><img alt=""></div>
     </section>
 
     <!-- ===== Catalog ===== -->
-    <section class="section section-alt" id="catalog">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">בחרו, הוסיפו לרשימה ושלחו לי</p>
-          <h2>קטלוג מוצרים</h2>
-          <p class="section-sub">כל המוצרים ניתנים להתאמה אישית – שם, לוגו, צבעים ותכולה. הוסיפו מוצרים לרשימת הבחירות ושלחו אליי בקליק לקבלת הצעת מחיר.</p>
-        </header>
-        <div class="filters" id="catalogFilters" role="tablist"></div>
-        <div class="products-grid" id="productsGrid"></div>
+    <section class="section catalog" id="catalog">
+      <div class="section-head split">
+        <div>
+          <div class="label"><span>03</span>קטלוג</div>
+          <h2 class="title" data-reveal>בחרו, הוסיפו<br>ושלחו לי</h2>
+        </div>
+        <p class="section-sub" data-reveal>כל המוצרים מותאמים אישית – שם, צבעים, הקדשה ותכולה. הוסיפו מה שאהבתם לרשימה ושלחו לי בוואטסאפ לקבלת הצעת מחיר.</p>
       </div>
+      <div class="filters" id="filters" role="tablist" aria-label="סינון לפי קטגוריה">
+        <span class="filters-indicator" aria-hidden="true"></span>
+      </div>
+      <div class="products" id="products"></div>
     </section>
 
-    <!-- ===== Gallery ===== -->
-    <section class="section" id="gallery">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">השראה מפרויקטים אמיתיים</p>
-          <h2>עבודות נבחרות</h2>
-        </header>
-        <div class="gallery-grid" id="galleryGrid"></div>
+    <!-- ===== Works (horizontal scroll) ===== -->
+    <section class="works" id="works">
+      <div class="works-sticky">
+        <div class="works-head">
+          <div class="label light"><span>04</span>עבודות נבחרות</div>
+          <h2 class="title">מהסטודיו<br><em>to your hands</em></h2>
+          <div class="works-progress"><b id="worksBar"></b></div>
+        </div>
+        <div class="works-track" id="worksTrack"></div>
       </div>
     </section>
 
     <!-- ===== Process ===== -->
-    <section class="section section-alt" id="process">
-      <div class="container">
-        <header class="section-head">
-          <p class="eyebrow">פשוט ונעים</p>
-          <h2>איך זה עובד</h2>
-        </header>
-        <ol class="steps">
-          <li><span class="step-num">1</span><h3>בוחרים</h3><p>מעיינים בקטלוג ומוסיפים לרשימה את מה שאהבתם – או מספרים לי על רעיון משלכם.</p></li>
-          <li><span class="step-num">2</span><h3>מדברים</h3><p>שולחים לי את הרשימה בוואטסאפ, ויחד מתאימים כמויות, תקציב ועיצוב.</p></li>
-          <li><span class="step-num">3</span><h3>מאשרים עיצוב</h3><p>מקבלים הדמיה של החריטה / ההדפסה ומאשרים לפני שנכנסים לייצור.</p></li>
-          <li><span class="step-num">4</span><h3>מקבלים</h3><p>המארזים נארזים באהבה ומגיעים אליכם באיסוף עצמי או במשלוח.</p></li>
-        </ol>
+    <section class="section process" id="process">
+      <div class="process-aside">
+        <div class="label"><span>05</span>איך זה עובד</div>
+        <h2 class="title" data-reveal>ארבעה צעדים<br>למתנה מושלמת</h2>
+        <div class="process-line"><b id="processLine"></b></div>
       </div>
+      <ol class="steps" id="steps">
+        <li><span>01</span><h3>בוחרים</h3><p>מעיינים בקטלוג ומוסיפים לרשימה את מה שאהבתם – או מספרים לי על רעיון משלכם.</p></li>
+        <li><span>02</span><h3>מדברים</h3><p>שולחים לי את הרשימה בוואטסאפ, ויחד מתאימים כמויות, תקציב, שמות והקדשות.</p></li>
+        <li><span>03</span><h3>מאשרים עיצוב</h3><p>מקבלים הדמיה של החריטה או ההדפסה ומאשרים לפני שנכנסים לעבודה.</p></li>
+        <li><span>04</span><h3>מקבלים באהבה</h3><p>המארזים נארזים בקפידה – באיסוף עצמי מקריית אתא או במשלוח עד הבית לכל הארץ.</p></li>
+      </ol>
     </section>
 
     <!-- ===== About ===== -->
-    <section class="section" id="about">
-      <div class="container about-inner">
-        <div class="about-photo" aria-hidden="true"><span>תמונה של אורן<br>בסטודיו</span></div>
-        <div class="about-text">
-          <p class="eyebrow">נעים להכיר</p>
-          <h2>היי, אני אורן</h2>
-          <p>אני מעצבת ומייסדת הסטודיו. אני מאמינה שמתנה טובה היא כזו שרואים בה מחשבה – ולכן כל מארז שיוצא מהסטודיו מעוצב במיוחד עבור מי שמקבל אותו.</p>
-          <p>בסטודיו אני משלבת עיצוב גרפי, הדפסת UV וחריטה כדי ליצור פריטים אישיים ועמידים, ועובדת עם לקוחות פרטיים, משפחות, בתי ספר, ארגונים וחברות בכל הארץ.</p>
-          <div class="about-stats">
-            <div><strong>+500</strong><small>מארזים שיצאו מהסטודיו</small></div>
-            <div><strong>100%</strong><small>התאמה אישית</small></div>
-            <div><strong>❤</strong><small>יחס אישי לכל הזמנה</small></div>
-          </div>
-        </div>
+    <section class="section about" id="about">
+      <div class="about-media" data-reveal="clip">
+        <img src="images/works/personal-candle.webp" alt="נר אישי עם מכסה במבוק חרוט" loading="lazy">
+        <svg class="about-mark"><use href="#mark"/></svg>
+      </div>
+      <div class="about-copy">
+        <div class="label"><span>06</span>נעים להכיר</div>
+        <h2 class="title" data-reveal>היי, אני אורן</h2>
+        <p data-reveal>אני מעצבת ומייסדת הסטודיו. אני מאמינה שמתנה טובה היא כזו שרואים בה מחשבה – ולכן כל מארז שיוצא מהסטודיו מעוצב במיוחד בשביל מי שיקבל אותו.</p>
+        <p data-reveal>אני משלבת עיצוב גרפי, חריטה, הדפסת UV והטבעה כדי ליצור פריטים אישיים, עמידים ויפים – לגננות ולמורות, לכלות ולבנות מצווה, לחגים, לצוותים ולחברות.</p>
+        <p class="signature" data-reveal>Oren Kazav</p>
       </div>
     </section>
 
+    <!-- ===== Instagram ===== -->
+    <section class="section insta">
+      <a class="insta-head" data-href="instagram" target="_blank" rel="noopener" data-cursor="hover">
+        <span class="label"><span>@</span>עקבו אחריי</span>
+        <span class="insta-handle">@orenkazav <svg><use href="#arrow"/></svg></span>
+      </a>
+      <div class="insta-grid" id="instaGrid"></div>
+    </section>
+
     <!-- ===== Contact ===== -->
-    <section class="section section-dark" id="contact">
-      <div class="container contact-inner">
-        <div class="contact-info">
-          <p class="eyebrow">בואו נדבר</p>
-          <h2>יש לכם אירוע בקרוב?</h2>
-          <p>ספרו לי מה אתם מתכננים ואחזור אליכם עם רעיונות והצעת מחיר.</p>
-          <ul class="contact-list">
-            <li><span>וואטסאפ / טלפון</span><a data-site-href="tel" data-site="phone"></a></li>
-            <li><span>מייל</span><a data-site-href="mailto" data-site="email"></a></li>
-            <li><span>משלוחים</span><b data-site="area"></b></li>
-          </ul>
-          <div class="socials">
-            <a data-site-href="instagram" target="_blank" rel="noopener">אינסטגרם</a>
-            <a data-site-href="facebook" target="_blank" rel="noopener">פייסבוק</a>
-          </div>
-        </div>
-        <form class="contact-form" id="contactForm">
-          <label>שם<input name="name" required autocomplete="name"></label>
-          <label>סוג הפנייה
-            <select name="type">
-              <option>מארז לחג</option>
-              <option>מארז לאירוע</option>
-              <option>מארזים לארגון / מוסד</option>
-              <option>מתנה אישית</option>
-              <option>אחר</option>
+    <section class="contact" id="contact">
+      <div class="contact-top">
+        <div class="label light"><span>07</span>בואו נדבר</div>
+        <h2 class="contact-title"><span class="line"><span>יש לכם רעיון?</span></span><span class="line"><span>בואו <em>נעצב</em> אותו יחד.</span></span></h2>
+        <a class="big-wa" data-wa="שלום אורן, הגעתי מהאתר ואשמח לפרטים 🙂" data-magnetic data-cursor="hover" aria-label="שליחת הודעת וואטסאפ">
+          <svg><use href="#wa"/></svg><span>וואטסאפ</span>
+        </a>
+      </div>
+      <div class="contact-grid">
+        <ul class="contact-info">
+          <li><span>טלפון / וואטסאפ</span><a data-href="tel" data-site="phone" dir="ltr"></a></li>
+          <li><span>אינסטגרם</span><a data-href="instagram" target="_blank" rel="noopener" dir="ltr">@orenkazav</a></li>
+          <li><span>איסוף</span><b data-site="pickup"></b></li>
+          <li><span>משלוחים</span><b data-site="shipping"></b></li>
+        </ul>
+        <form class="form" id="contactForm">
+          <div class="field"><input name="name" id="f-name" placeholder=" " required autocomplete="name"><label for="f-name">שם מלא</label></div>
+          <div class="field">
+            <select name="type" id="f-type">
+              <option>מארז לחג</option><option>מתנות לצוות / סוף שנה</option><option>אירוע או שמחה</option><option>מתנה אישית</option><option>משהו לילדים</option><option>אחר</option>
             </select>
-          </label>
-          <label>כמות משוערת<input name="qty" inputmode="numeric" placeholder="לדוגמה: 40"></label>
-          <label>ספרו לי עוד<textarea name="msg" rows="4" placeholder="תאריך, תקציב, רעיונות..."></textarea></label>
-          <button class="btn btn-primary" type="submit">שליחה בוואטסאפ</button>
+            <label for="f-type" class="fixed">סוג הפנייה</label>
+          </div>
+          <div class="field"><input name="qty" id="f-qty" inputmode="numeric" placeholder=" "><label for="f-qty">כמות משוערת</label></div>
+          <div class="field"><input name="date" id="f-date" placeholder=" "><label for="f-date">מתי צריך?</label></div>
+          <div class="field wide"><textarea name="msg" id="f-msg" rows="3" placeholder=" "></textarea><label for="f-msg">ספרו לי עוד – רעיונות, שמות, תקציב</label></div>
+          <button class="btn btn-paper" type="submit" data-magnetic><span>שליחה בוואטסאפ</span><svg><use href="#arrow"/></svg></button>
         </form>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      <p>© <span id="year"></span> <span data-site="name"></span> · <span data-site="tagline"></span></p>
+  <footer class="footer">
+    <div class="footer-word" aria-hidden="true">OREN KAZAV</div>
+    <div class="footer-row">
+      <span>© <span id="year"></span> אורן קצב · סטודיו לעיצוב ומיתוג</span>
+      <a href="#top" class="to-top">חזרה למעלה ↑</a>
     </div>
   </footer>
 
-  <!-- Floating WhatsApp -->
-  <a href="#" class="wa-float" data-wa="שלום אורן, הגעתי מהאתר ואשמח לפרטים" aria-label="וואטסאפ">
-    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3Zm0 23.6a10.6 10.6 0 0 1-5.4-1.5l-.4-.2-3.9 1 1-3.8-.2-.4A10.6 10.6 0 1 1 16 26.6Zm5.8-7.9c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.7 8.7 0 0 1-4.3-3.8c-.3-.6.3-.5 1-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6a1.2 1.2 0 0 0-.9.4 3.7 3.7 0 0 0-1.1 2.7 6.5 6.5 0 0 0 1.3 3.4 14.6 14.6 0 0 0 5.6 5c2.1.9 2.9 1 4 .8a3.4 3.4 0 0 0 2.2-1.6 2.8 2.8 0 0 0 .2-1.6c-.1-.1-.3-.2-.6-.3Z"/></svg>
-  </a>
+  <a class="wa-float" data-wa="שלום אורן, הגעתי מהאתר ואשמח לפרטים" aria-label="וואטסאפ"><svg><use href="#wa"/></svg></a>
 
   <!-- Product modal -->
-  <div class="modal" id="productModal" aria-hidden="true">
+  <div class="modal" id="modal" aria-hidden="true">
     <div class="modal-backdrop" data-close></div>
     <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <button class="modal-close" data-close aria-label="סגירה">×</button>
+      <button class="x-btn" data-close aria-label="סגירה"><span></span><span></span></button>
       <div class="modal-body" id="modalBody"></div>
     </div>
   </div>
 
   <!-- Selection list drawer -->
-  <aside class="drawer" id="listDrawer" aria-hidden="true">
+  <aside class="drawer" id="drawer" aria-hidden="true">
     <div class="drawer-backdrop" data-close-list></div>
     <div class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
       <header class="drawer-head">
         <h3 id="drawerTitle">הבחירות שלי</h3>
-        <button class="modal-close" data-close-list aria-label="סגירה">×</button>
+        <button class="x-btn" data-close-list aria-label="סגירה"><span></span><span></span></button>
       </header>
       <div class="drawer-items" id="listItems"></div>
       <footer class="drawer-foot">
-        <label>הערות להזמנה<textarea id="listNotes" rows="3" placeholder="תאריך נדרש, שמות לחריטה, צבעים..."></textarea></label>
-        <button class="btn btn-primary btn-block" id="sendList">שליחת הרשימה לאורן בוואטסאפ</button>
-        <p class="drawer-hint">הרשימה נשלחת כהודעה – ללא התחייבות. אחזור אליכם עם הצעת מחיר.</p>
+        <div class="field"><textarea id="listNotes" rows="2" placeholder=" "></textarea><label for="listNotes">הערות – תאריך, שמות, צבעים</label></div>
+        <button class="btn btn-ink btn-block" id="sendList"><svg><use href="#wa"/></svg><span>שליחת הרשימה לאורן</span></button>
+        <p class="drawer-hint">נשלח כהודעת וואטסאפ – ללא התחייבות. אחזור אליכם עם הצעת מחיר.</p>
       </footer>
     </div>
   </aside>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+  <script src="vendor/lenis.min.js" defer></script>
+  <script src="data.js" defer></script>
+  <script src="app.js" defer></script>
 </body>
 </html>

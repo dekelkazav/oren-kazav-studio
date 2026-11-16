@@ -1,12 +1,15 @@
-{
+﻿{
   "name": "oren-kazav-studio",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "אתר תדמית וקטלוג – סטודיו אורן כזב לעיצוב ומיתוג מארזים",
+  "description": "אתר תדמית וקטלוג – אורן קצב, סטודיו לעיצוב ומיתוג",
   "scripts": {
-    "start": "serve . -l 8080 --no-clipboard"
+    "start": "serve . -l 8080 --no-clipboard",
+    "images": "node scripts/optimize-images.mjs"
   },
   "devDependencies": {
-    "serve": "^14.2.8"
+    "lenis": "^1.3.27",
+    "serve": "^14.2.8",
+    "sharp": "^0.35.5"
   }
 }
