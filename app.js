@@ -14,12 +14,22 @@
   const isDesktop = () => innerWidth > 980;
   const catName = (id) => (CATEGORIES.find((c) => c.id === id) || {}).name || "";
   const waLink = (text) => `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(text)}`;
-  const img = (name, size = "sm") => `images/works/${name}${size === "sm" ? "-sm" : ""}.webp`;
+  const work = (name) => (name ? `images/works/${name}` : "");
   const PH = `<div class="ph"><svg><use href="#mark"/></svg><span>תמונה בקרוב</span></div>`;
 
-  function media(name, alt, sizes = "(max-width: 600px) 50vw, 25vw", eager = false) {
-    if (!name) return PH;
-    return `<img src="${img(name)}" srcset="${img(name)} 700w, ${img(name, "lg")} 1400w" sizes="${sizes}" alt="${esc(alt)}" ${eager ? "" : 'loading="lazy"'} decoding="async">`;
+  // A photo is a path without size and extension: "<base>-sm.webp" is 700px, "<base>.webp" is 1400px
+  function media(base, alt, sizes = "(max-width: 600px) 50vw, 25vw", eager = false) {
+    if (!base) return PH;
+    return `<img src="${base}-sm.webp" srcset="${base}-sm.webp 700w, ${base}.webp 1400w" sizes="${sizes}" alt="${esc(alt)}" ${eager ? "" : 'loading="lazy"'} decoding="async">`;
+  }
+
+  // A product's photos: its album from חומרים/<folder> (cover first), or its single work photo
+  function photos(p) {
+    const n = (window.CATALOG_IMAGES || {})[p.id] || 0;
+    if (!n) return p.image ? [work(p.image)] : [];
+    const all = Array.from({ length: n }, (_, i) => `images/catalog/${p.id}/${String(i + 1).padStart(2, "0")}`);
+    const c = clamp((p.cover || 1) - 1, 0, n - 1);
+    return [all[c], ...all.filter((_, i) => i !== c)];
   }
 
   if ("scrollRestoration" in history) history.scrollRestoration = "manual";
@@ -139,11 +149,12 @@
   }
 
   function cardHTML(p, i) {
-    const on = inList(p.id);
+    const on = inList(p.id), ph = photos(p);
     return `<article class="card" style="--d:${(i % 4) * 0.08}s">
-      <div class="card-media" data-open="${p.id}" data-cursor="view" data-label="לפרטים">
-        ${media(p.image, p.name)}
+      <div class="card-media" data-open="${p.id}" data-cursor="view" data-label="${ph.length > 1 ? "לגלריה" : "לפרטים"}">
+        ${media(ph[0], p.name)}
         <span class="card-tag">${esc(catName(p.category))}</span>
+        ${ph.length > 1 ? `<span class="card-count">${ph.length} תמונות</span>` : ""}
         <button class="add${on ? " added" : ""}" data-add="${p.id}" aria-pressed="${on}" aria-label="${on ? "הסרה מהרשימה" : "הוספה לרשימה"}: ${esc(p.name)}"><i></i><span>${on ? "נבחר" : "הוספה"}</span></button>
       </div>
       <div class="card-info">
@@ -229,7 +240,7 @@
     box.innerHTML = list.map((i) => {
       const p = PRODUCTS.find((x) => x.id === i.id);
       return `<div class="list-item" data-id="${p.id}">
-        <div class="list-thumb">${media(p.image, p.name, "76px")}</div>
+        <div class="list-thumb">${media(photos(p)[0], p.name, "76px")}</div>
         <div><strong>${esc(p.name)}</strong>
           <div class="qty"><button type="button" data-step="1" aria-label="הוספת יחידה">+</button><input type="number" min="1" value="${i.qty}" aria-label="כמות"><button type="button" data-step="-1" aria-label="הפחתת יחידה">−</button></div>
         </div>
@@ -265,12 +276,53 @@
 
   /* ===== product modal ===== */
   const modal = $("#modal");
+  const MODAL_SIZES = "(max-width: 980px) 100vw, 540px";
+  const askText = (p, photo) => `שלום אורן, אשמח לפרטים על "${p.name}" מהאתר${photo ? ` (תמונה ${photo})` : ""}`;
+  let gal = null; // the album open in the modal: { p, list, i }
+
+  function galleryHTML(p, list) {
+    const n = list.length;
+    return `<div class="modal-media gallery">
+      <div class="gallery-stage">
+        <img id="galImg" src="${list[0]}-sm.webp" srcset="${list[0]}-sm.webp 700w, ${list[0]}.webp 1400w" sizes="${MODAL_SIZES}" alt="${esc(p.name)} – תמונה 1 מתוך ${n}" decoding="async">
+        <button type="button" class="gallery-nav prev" data-gal="-1" aria-label="התמונה הקודמת"><svg aria-hidden="true"><use href="#arrow"/></svg></button>
+        <button type="button" class="gallery-nav next" data-gal="1" aria-label="התמונה הבאה"><svg aria-hidden="true"><use href="#arrow"/></svg></button>
+        <span class="gallery-count" dir="ltr" aria-hidden="true">1 / ${n}</span>
+      </div>
+      <div class="gallery-thumbs">${list.map((b, i) => `<button type="button" class="gallery-thumb" data-thumb="${i}" aria-label="תמונה ${i + 1} מתוך ${n}"${i ? "" : ' aria-current="true"'}><img src="${b}-xs.webp" alt="" loading="lazy" decoding="async"></button>`).join("")}</div>
+      <span class="sr-only" id="galLive" aria-live="polite"></span>
+    </div>`;
+  }
+
+  function showPhoto(i) {
+    if (!gal) return;
+    const n = gal.list.length;
+    gal.i = (i + n) % n;
+    const base = gal.list[gal.i], pic = $("#galImg");
+    pic.classList.add("is-swapping");
+    pic.onload = pic.onerror = () => pic.classList.remove("is-swapping");
+    pic.srcset = `${base}-sm.webp 700w, ${base}.webp 1400w`;
+    pic.src = `${base}-sm.webp`;
+    pic.alt = `${gal.p.name} – תמונה ${gal.i + 1} מתוך ${n}`;
+    $(".gallery-count", modal).textContent = `${gal.i + 1} / ${n}`;
+    $("#galLive").textContent = `תמונה ${gal.i + 1} מתוך ${n}`;
+    $("#modalAsk").href = waLink(askText(gal.p, gal.i + 1));
+    // mark the current thumbnail and keep it visible inside the strip
+    const strip = $(".gallery-thumbs", modal), thumbs = [...strip.children];
+    thumbs.forEach((t, k) => (k === gal.i ? t.setAttribute("aria-current", "true") : t.removeAttribute("aria-current")));
+    const sr = strip.getBoundingClientRect(), tr = thumbs[gal.i].getBoundingClientRect();
+    const behavior = reduce ? "auto" : "smooth";
+    if (tr.left < sr.left) strip.scrollBy({ left: tr.left - sr.left - 12, behavior });
+    else if (tr.right > sr.right) strip.scrollBy({ left: tr.right - sr.right + 12, behavior });
+  }
+
   function openProduct(id) {
     const p = PRODUCTS.find((x) => x.id === id);
     if (!p) return;
-    const on = inList(p.id);
+    const on = inList(p.id), ph = photos(p);
+    gal = ph.length > 1 ? { p, list: ph, i: 0 } : null;
     $("#modalBody").innerHTML = `<div class="modal-grid">
-      <div class="modal-media">${media(p.image, p.name, "(max-width: 980px) 100vw, 540px", true)}</div>
+      ${gal ? galleryHTML(p, ph) : `<div class="modal-media">${media(ph[0], p.name, MODAL_SIZES, true)}</div>`}
       <div class="modal-info">
         <span class="eyebrow">${esc(catName(p.category))}</span>
         <h3 id="modalTitle">${esc(p.name)}</h3>
@@ -281,7 +333,7 @@
         <p class="modal-meta">כמות מינימלית: ${esc(p.minQty)} · הכל ניתן להתאמה אישית</p>
         <div class="modal-actions">
           <button class="btn btn-ink${on ? " added" : ""}" data-add="${p.id}" aria-pressed="${on}"><span>${on ? "✓ ברשימה – לחצו להסרה" : "הוספה לרשימת הבחירות"}</span></button>
-          <a class="btn btn-line" target="_blank" rel="noopener" href="${waLink(`שלום אורן, אשמח לפרטים על "${p.name}" מהאתר`)}"><svg><use href="#wa"/></svg><span>שאלה על המוצר בוואטסאפ</span></a>
+          <a class="btn btn-line" id="modalAsk" target="_blank" rel="noopener" href="${waLink(askText(p, gal && 1))}"><svg><use href="#wa"/></svg><span>שאלה על המוצר בוואטסאפ</span></a>
         </div>
       </div></div>`;
     modal.classList.add("open");
@@ -293,9 +345,27 @@
     if (!modal.classList.contains("open")) return;
     modal.classList.remove("open");
     modal.setAttribute("aria-hidden", "true");
+    gal = null;
     if (!drawer.classList.contains("open")) { lockScroll(false); restoreFocus(); }
   }
-  modal.addEventListener("click", (e) => { if (e.target.closest("[data-close]")) closeModal(); });
+  modal.addEventListener("click", (e) => {
+    if (e.target.closest("[data-close]")) return closeModal();
+    const step = e.target.closest("[data-gal]"), thumb = e.target.closest("[data-thumb]");
+    if (step) showPhoto(gal.i + Number(step.dataset.gal));
+    else if (thumb) showPhoto(Number(thumb.dataset.thumb));
+  });
+  // swipe between photos on touch screens (RTL: swiping right brings the next photo)
+  let swipe = null;
+  modal.addEventListener("pointerdown", (e) => {
+    swipe = gal && e.pointerType !== "mouse" && e.target.closest(".gallery-stage") ? { x: e.clientX, y: e.clientY } : null;
+  });
+  modal.addEventListener("pointerup", (e) => {
+    if (!swipe) return;
+    const dx = e.clientX - swipe.x, dy = e.clientY - swipe.y;
+    swipe = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.2) showPhoto(gal.i + (dx > 0 ? 1 : -1));
+  });
+  modal.addEventListener("pointercancel", () => (swipe = null));
 
   document.addEventListener("click", (e) => {
     const add = e.target.closest("[data-add]");
@@ -310,16 +380,24 @@
       renderProducts(true);
     }
   });
-  addEventListener("keydown", (e) => { if (e.key === "Escape") { closeModal(); closeDrawer(); closeMenu(); } });
+  addEventListener("keydown", (e) => {
+    if (e.key === "Escape") { closeModal(); closeDrawer(); closeMenu(); }
+    // arrow keys flip through an open album (RTL: left = next)
+    const arrow = e.key === "ArrowLeft" || e.key === "ArrowRight";
+    if (arrow && gal && modal.classList.contains("open") && !drawer.classList.contains("open") && !e.target.closest("input, textarea")) {
+      e.preventDefault();
+      showPhoto(gal.i + (e.key === "ArrowLeft" ? 1 : -1));
+    }
+  });
 
   /* ===== works + instagram ===== */
   $("#worksTrack").innerHTML = GALLERY.map((g, i) => `
     <figure class="work" data-cursor="view" data-label="${esc(g.tag)}">
-      <div class="work-media">${media(g.image, g.title, "(max-width: 980px) 72vw, 26vw")}</div>
+      <div class="work-media">${media(work(g.image), g.title, "(max-width: 980px) 72vw, 26vw")}</div>
       <figcaption><b><small>${String(i + 1).padStart(2, "0")}</small>${esc(g.title)}</b><span>${esc(g.tag)}</span></figcaption>
     </figure>`).join("");
   $("#instaGrid").innerHTML = INSTAGRAM_FEED.map((n) =>
-    `<a href="${SITE.instagram}" target="_blank" rel="noopener" aria-label="לאינסטגרם של אורן" data-cursor="hover">${media(n, "עבודה מהסטודיו", "(max-width: 980px) 33vw, 16vw")}<svg><use href="#ig"/></svg></a>`).join("");
+    `<a href="${SITE.instagram}" target="_blank" rel="noopener" aria-label="לאינסטגרם של אורן" data-cursor="hover">${media(work(n), "עבודה מהסטודיו", "(max-width: 980px) 33vw, 16vw")}<svg><use href="#ig"/></svg></a>`).join("");
 
   /* ===== contact form → WhatsApp ===== */
   $("#contactForm").addEventListener("submit", (e) => {

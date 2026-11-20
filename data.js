@@ -36,12 +36,58 @@ const TECHNIQUES = {
 };
 
 /* =========================================================
-   מוצרים בקטלוג
-   image: שם קובץ מתוך images/works (בלי סיומת), למשל "personal-candle".
-   כל עוד השדה ריק – מוצג רקע מעוצב עם הלוגו.
-   להוספת תמונות חדשות: שמים אותן בתיקייה "חומרים/תמונות" ומריצים npm run images
+   Catalog products
+   image:  a single photo from images/works (file name without extension), e.g. "personal-candle".
+   folder: a photo album – the name of a folder in חומרים/ (e.g. "חורף"). `npm run images`
+           turns its photos into images/catalog/<id>/, and the product window shows them as a gallery.
+   cover:  which photo of the album is shown first (1 = the first file in the folder).
+   With neither image nor folder, the card shows a placeholder with the logo.
    ========================================================= */
 const PRODUCTS = [
+  {
+    id: "winter",
+    name: "חורף",
+    folder: "חורף",
+    cover: 8,
+    category: "staff",
+    techniques: ["uv", "print", "design"],
+    desc: "מארזי חורף מחממים: כוס זכוכית או תרמוס עם שם בהדפסת UV, חליטות, מקלות קינמון ותפוזים מיובשים – באריזה מעוצבת. מתנה לצוותים, ללקוחות ולמשפחה.",
+    includes: ["כוס זכוכית או תרמוס עם שם", "חליטות ותבלינים לשתייה חמה", "אריזה מעוצבת וסרט", "ברכה אישית"],
+    minQty: "לפי הזמנה",
+  },
+  {
+    id: "hanukkah",
+    name: "חנוכה",
+    folder: "חנוכה",
+    cover: 9,
+    category: "holidays",
+    techniques: ["print", "uv", "design"],
+    desc: "מתנות חנוכה לגנים, לבתי ספר, לצוותים ולמשפחה: קופות עם שם, ערכות צביעה, מנורות לילה ומארזי חג באריזה חגיגית.",
+    includes: ["קופה או מתנה עם שם", "ערכת צביעה וטושים", "מארזי חג", "אריזה חגיגית"],
+    minQty: "מיחידה אחת",
+  },
+  {
+    id: "name-stickers",
+    name: "מדבקות שם לילדים",
+    folder: "מדבקות שם לילדים",
+    cover: 9,
+    category: "kids",
+    techniques: ["print", "uv", "design"],
+    desc: "מדבקות שם עמידות לציוד בית הספר והגן, בצבעים ובעיצובים לבחירה – וגם מחזיקי מפתחות מפרספקס עם שם.",
+    includes: ["דף מדבקות בגדלים שונים", "עיצוב עם שם הילד/ה", "צבעים לבחירה"],
+    minQty: "סט אחד",
+  },
+  {
+    id: "perspex-signs",
+    name: "שלטי פרספקס",
+    folder: "שלטי פרספקס",
+    cover: 4,
+    category: "personal",
+    techniques: ["uv", "engrave", "design"],
+    desc: "שלטים מפרספקס בעיצוב אישי: שלטי לוגו לעסקים, ברכת העסק, שלטי משפחה לדלת, מזוזות ושילוט למשרד.",
+    includes: ["שלט בעיצוב אישי", "התאמה ללוגו או לטקסט שלכם", "הדמיה לאישור לפני הייצור"],
+    minQty: "לפי הזמנה",
+  },
   {
     id: "diffuser-names",
     name: "מפיץ ריח ונר בשם אישי",
@@ -163,16 +209,6 @@ const PRODUCTS = [
     image: "",
   },
   {
-    id: "hanukkah",
-    name: "מארזי חנוכה",
-    category: "holidays",
-    techniques: ["engrave", "design"],
-    desc: "מתנות חנוכה מעוצבות לגנים, לבתי ספר ולמשפחה – עם שם, ברכה ואריזה חגיגית.",
-    includes: ["תכולה לבחירה", "התאמה אישית", "אריזה חגיגית"],
-    minQty: "מיחידה אחת",
-    image: "",
-  },
-  {
     id: "purim",
     name: "משלוחי מנות לפורים",
     category: "holidays",
@@ -190,16 +226,6 @@ const PRODUCTS = [
     desc: "מארזי חג החירות לעובדים, לצוות ולמשפחה – בעיצוב נקי ומוקפד.",
     includes: ["תכולה מותאמת", "פריט חרוט / מודפס", "ברכת חג"],
     minQty: "מיחידה אחת",
-    image: "",
-  },
-  {
-    id: "name-stickers",
-    name: "מדבקות שם לילדים",
-    category: "kids",
-    techniques: ["print", "design"],
-    desc: "מדבקות שם עמידות לציוד בית הספר והגן – בעיצובים צבעוניים לבחירה.",
-    includes: ["סט מדבקות בגדלים שונים", "עיצוב עם שם הילד/ה"],
-    minQty: "סט אחד",
     image: "",
   },
   {
