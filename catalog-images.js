@@ -4,5 +4,9 @@ window.CATALOG_IMAGES = {
   "winter": 16,
   "hanukkah": 14,
   "name-stickers": 30,
-  "perspex-signs": 34
+  "perspex-signs": 34,
+  "pesach": 109,
+  "purim": 35,
+  "kids-gifts": 32,
+  "personal-gifts": 79
 };
